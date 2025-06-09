@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Hiran Oliveira | Frontend Developer</title>
+	<meta name="description"
+		content="Frontend Developer specializing in institutional websites and landing pages with 7+ years of experience." />
+	<meta name="keywords"
+		content="frontend developer, web development, institutional websites, landing pages, responsive design" />
+	<script src="https://cdn.tailwindcss.com"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@400;500&display=swap"
+		rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/19.2.16/css/intlTelInput.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/19.2.16/js/intlTelInput.min.js"></script>
+	<script>
+		tailwind.config = {
+			darkMode: "class",
+			theme: {
+				extend: {
+					colors: {
+						primary: "#1a75ff",
+						darkbg: "#0a0a0a",
+						darksecondary: "#1a1a1a",
+						lightbg: "#ffffff",
+						lightsecondary: "#f5f5f5",
+						darktext: "#f0f0f0",
+						lighttext: "#333333",
+					},
+					fontFamily: {
+						heading: ["Montserrat", "sans-serif"],
+						body: ["Roboto", "sans-serif"],
+					},
+					animation: {
+						"fade-in": "fadeIn 1s ease-in-out",
+					},
+					keyframes: {
+						fadeIn: {
+							"0%": { opacity: "0" },
+							"100%": { opacity: "1" },
+						},
+					},
+				},
+			},
+		};
+	</script>
+	<style>
+		.animate-fade-in {
+			animation: fadeIn 1s ease-in-out;
+		}
+
+		.project-card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+		}
+
+		.dark .project-card:hover {
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+		}
+
+		.skill-tag:hover {
+			transform: scale(1.05);
+		}
+
+		.nav-link {
+			position: relative;
+		}
+
+		.nav-link::after {
+			content: "";
+			position: absolute;
+			width: 0;
+			height: 2px;
+			bottom: -2px;
+			left: 0;
+			background-color: #1a75ff;
+			transition: width 0.3s ease;
+		}
+
+		.nav-link:hover::after {
+			width: 100%;
+		}
+
+		.hamburger span {
+			display: block;
+			width: 25px;
+			height: 3px;
+			margin: 5px auto;
+			transition: all 0.3s ease-in-out;
+			background-color: currentColor;
+		}
+
+		.hamburger.active span:nth-child(1) {
+			transform: translateY(8px) rotate(45deg);
+		}
+
+		.hamburger.active span:nth-child(2) {
+			opacity: 0;
+		}
+
+		.hamburger.active span:nth-child(3) {
+			transform: translateY(-8px) rotate(-45deg);
+		}
+
+		.mobile-menu {
+			max-height: 0;
+			overflow: hidden;
+			transition: max-height 0.3s ease-out;
+		}
+
+		.mobile-menu.open {
+			max-height: 500px;
+		}
+
+		.language-switcher.active {
+			border-color: #1a75ff;
+			color: #1a75ff;
+		}
+
+		/* 
+			.img.screenshot-img {
+				max-width: 80%;
+				width: 100%;
+			} */
+		.iti__country-name {
+			margin-right: 8px;
+			color: black;
+		}
+
+		.hero-description {
+			white-space: pre-line;
+		}
+	</style>
+</head>
+
+<body class="font-body bg-lightbg text-lighttext dark:bg-darkbg dark:text-darktext transition-colors duration-300">
+	<header class="sticky top-0 z-50 bg-white/80 dark:bg-darksecondary/80 backdrop-blur-md shadow-sm">
+		<div class="container mx-auto px-4 py-4 flex justify-between items-center">
+			<a href="#" class="text-2xl font-heading font-bold text-primary">Hiran Oliveira</a>
+
+			<nav class="hidden md:flex space-x-8">
+				<a href="#projects" class="nav-link" data-translate="nav-projects">Projects</a>
+				<a href="#skills" class="nav-link" data-translate="nav-skills">Skills</a>
+				<a href="#about" class="nav-link" data-translate="nav-about">About</a>
+				<a href="#contact" class="nav-link" data-translate="nav-contact">Contact</a>
+			</nav>
+
+			<div class="flex items-center space-x-4">
+				<div class="flex items-center space-x-2">
+					<button id="language-en"
+						class="language-switcher px-2 py-1 rounded border border-gray-300 dark:border-gray-600">
+						EN
+					</button>
+					<button id="language-pt"
+						class="language-switcher px-2 py-1 rounded border border-gray-300 dark:border-gray-600">
+						PT
+					</button>
+				</div>
+
+				<button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+					<i class="fas fa-moon dark:hidden"></i>
+					<i class="fas fa-sun hidden dark:block"></i>
+				</button>
+
+				<button id="hamburger" class="md:hidden hamburger">
+					<span></span>
+					<span></span>
+					<span></span>
+				</button>
+			</div>
+		</div>
+
+		<nav id="mobile-menu" class="mobile-menu md:hidden bg-white dark:bg-darksecondary">
+			<div role="menu" class="container mx-auto px-4 py-2 flex flex-col space-y-3">
+				<a href="#projects" class="py-2" data-translate="nav-projects-mobile">Projects</a>
+				<a href="#skills" class="py-2" data-translate="nav-skills-mobile">Skills</a>
+				<a href="#about" class="py-2" data-translate="nav-about-mobile">About</a>
+				<a href="#contact" class="py-2" data-translate="nav-contact-mobile">Contact</a>
+			</div>
+		</nav>
+	</header>
+
+	<main>
+		<!-- Hero Section -->
+		<section
+			class="min-h-[80vh] flex items-center justify-center bg-gradient-to-b from-lightsecondary to-lightbg dark:from-darksecondary dark:to-darkbg">
+			<div class="container mx-auto px-4 text-center">
+				<h1 class="text-4xl md:text-6xl font-heading font-bold mb-6 animate-fade-in">
+					<span class="text-primary" data-translate="hero-heading-part1">Hiran Oliveira</span><br />
+					<span class="text-2xl md:text-4xl"><span data-translate="hero-heading-part2">Frontend Developer
+							Specialized in</span><br />
+						<span data-translate="hero-heading-part3">Institutional Websites & Landing Pages</span></span>
+				</h1>
+				<p class="text-xl mb-8 max-w-2xl mx-auto hero-description" data-translate="hero-description">
+					Creating responsive, accessible, and high-performance
+					websites that deliver results.
+				</p>
+				<a href="#projects"
+					class="inline-block bg-primary hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105"
+					data-translate="hero-button">
+					View Projects
+				</a>
+			</div>
+		</section>
+
+		<!-- Projects Section -->
+		<section id="projects" class="py-20 bg-lightsecondary dark:bg-darksecondary">
+			<div class="container mx-auto px-4">
+				<h2 class="text-3xl font-heading font-bold mb-12 text-center" data-translate="projects-heading">
+					Featured Projects
+				</h2>
+
+				<div class="grid grid-cols-1 md:max-w-4xl mx-auto md:grid-cols-2 gap-8">
+					<!-- Project 1 -->
+					<div
+						class="project-card bg-white dark:bg-darksecondary rounded-lg overflow-hidden shadow-lg transition-all duration-300">
+						<div class="h-48 bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
+							<img src="/assets/img/midialand.png" alt="Midialand Screenshot"
+								class="screenshot-img max-w-[80%] w-[100%]" />
+						</div>
+
+						<div class="p-6" data-translate-group="project1">
+							<h3 class="text-xl font-heading font-bold mb-2" data-translate="project1-title">
+								Midialand
+							</h3>
+							<p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="project1-description">
+								Institutional site for Brazil's leading Out
+								Of Home media company.
+							</p>
+							<div class="flex flex-wrap gap-2 mb-4">
+								<span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">HTML/CSS</span>
+								<span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">JavaScript</span>
+								<span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">PHP</span>
+							</div>
+							<a href="https://midialand.com.br" target="_blank"
+								class="text-primary hover:underline font-medium" data-translate="project1-link">
+								Visit Site
+								<i class="fas fa-external-link-alt ml-1"></i>
+							</a>
+						</div>
+					</div>
+
+					<!-- Project 2 -->
+					<div
+						class="project-card bg-white dark:bg-darksecondary rounded-lg overflow-hidden shadow-lg transition-all duration-300">
+						<div class="h-48 bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
+							<img src="/assets/img/udo.png" alt="Universidade da Odontologia Screenshot"
+								class="screenshot-img max-w-[80%] w-[100%]" />
+						</div>
+						<div class="p-6" data-translate-group="project2">
+							<h3 class="text-xl font-heading font-bold mb-2" data-translate="project2-title">
+								Universidade da Odontologia
+							</h3>
+							<p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="project2-description">
+								Dentist marketplace connecting professionals
+								with patients.
+							</p>
+							<div class="flex flex-wrap gap-2 mb-4">
+								<span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">WordPress</span>
+								<span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">HTML/CSS</span>
+								<span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">JavaScript</span>
+								<span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">PHP</span>
+							</div>
+							<a href="https://universidadedaodontologia.com.br" target="_blank"
+								class="text-primary hover:underline font-medium" data-translate="project2-link">
+								Visit Site
+								<i class="fas fa-external-link-alt ml-1"></i>
+							</a>
+						</div>
+					</div>
+
+					<!-- Project 3 -->
+					<div
+						class="project-card bg-white dark:bg-darksecondary rounded-lg overflow-hidden shadow-lg transition-all duration-300">
+						<div class="h-48 bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
+							<img src="/assets/img/weagle.png" alt="Weagle Governance Screenshot"
+								class="screenshot-img max-w-[80%] w-[100%]" />
+						</div>
+						<div class="p-6" data-translate-group="project3">
+							<h3 class="text-xl font-heading font-bold mb-2" data-translate="project3-title">
+								Weagle Governance
+							</h3>
+							<p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="project3-description">
+								Multinational corporate governance website
+								with complex functionality.
+							</p>
+							<div class="flex flex-wrap gap-2 mb-4">
+								<span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">JavaScript</span>
+								<span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">PHP</span>
+							</div>
+							<a href="https://weagle.com.br" target="_blank"
+								class="text-primary hover:underline font-medium" data-translate="project3-link">
+								Visit Site
+								<i class="fas fa-external-link-alt ml-1"></i>
+							</a>
+						</div>
+					</div>
+					<!-- Project 4 -->
+					<div
+						class="project-card bg-white dark:bg-darksecondary rounded-lg overflow-hidden shadow-lg transition-all duration-300">
+						<div class="h-48 bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
+							<img src="/assets/img/focus.svg" alt="Focus + CENES Screenshot"
+								class="screenshot-img max-w-[80%] w-[100%]" />
+						</div>
+						<div class="p-6" data-translate-group="project4">
+							<h3 class="text-xl font-heading font-bold mb-2" data-translate="project4-title">
+								FOCUS Concursos + Faculdade FOCUS + CENES
+							</h3>
+							<p class="text-gray-600 dark:text-gray-300 mb-4" data-translate="project4-description">
+								Biggest .
+							</p>
+							<div class="flex flex-wrap gap-2 mb-4">
+								<span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">JavaScript</span>
+								<span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">PHP</span>
+								<span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">WordPress</span>
+								<span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">GreatPages</span>
+								<span class="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-sm">Homio</span>
+							</div>
+							<a href="https://weagle.com.br" target="_blank"
+								class="text-primary hover:underline font-medium" data-translate="project4-link">
+								Visit Site
+								<i class="fas fa-external-link-alt ml-1"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<h2 class="text-3xl font-heading font-bold mb-12 text-center mt-[60px]" data-translate="trusted-heading">
+				Companies that trusted us
+			</h2>
+			<div class="max-w-4xl mx-auto">
+				<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-4">
+					<div
+						class="skill-tag bg-white dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300 justify-center">
+						<img src="/assets/img/ligga.jpg" alt="" class="companies w-[100%] max-w-[80%]" />
+					</div>
+					<div
+						class="skill-tag bg-white dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300 justify-center">
+						<img src="/assets/img/philco.png" alt="" class="companies w-[100%] max-w-[80%]" />
+					</div>
+					<div
+						class="skill-tag bg-white dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300 justify-center">
+						<img src="/assets/img/britania.png" alt="" class="companies w-[100%] max-w-[80%]" />
+					</div>
+					<div
+						class="skill-tag bg-white dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300 justify-center">
+						<img src="/assets/img/romanha.png" alt="" class="companies w-[100%] max-w-[80%]" />
+					</div>
+					<div
+						class="skill-tag bg-white dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300 justify-center">
+						<img src="/assets/img/organnact.png" alt="" class="companies w-[100%] max-w-[80%]" />
+					</div>
+					<div
+						class="skill-tag bg-white dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300 justify-center">
+						<img src="/assets/img/domatech.png" alt="" class="companies w-[100%] max-w-[80%]" />
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Skills Section -->
+		<section id="skills" class="py-20">
+			<div class="container mx-auto px-4">
+				<h2 class="text-3xl font-heading font-bold mb-12 text-center" data-translate="skills-heading">
+					Skills & Expertise
+				</h2>
+
+				<div class="max-w-4xl mx-auto">
+					<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+						<div
+							class="skill-tag bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300">
+							<i class="fab fa-html5 text-3xl text-orange-500 mb-2"></i>
+							<span data-translate="skill-html5">HTML5</span>
+						</div>
+						<div
+							class="skill-tag bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300">
+							<i class="fab fa-css3-alt text-3xl text-blue-500 mb-2"></i>
+							<span data-translate="skill-css3">CSS3</span>
+						</div>
+						<div
+							class="skill-tag bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300">
+							<i class="fab fa-js text-3xl text-yellow-500 mb-2"></i>
+							<span data-translate="skill-javascript">JavaScript</span>
+						</div>
+						<div
+							class="skill-tag bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300">
+							<i class="fab fa-react text-3xl text-blue-400 mb-2"></i>
+							<span data-translate="skill-react">React</span>
+						</div>
+						<div
+							class="skill-tag bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300">
+							<i class="fas fa-code text-3xl text-purple-500 mb-2"></i>
+							<span data-translate="skill-redux">Redux</span>
+						</div>
+						<div
+							class="skill-tag bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300">
+							<i class="fas fa-paint-brush text-3xl text-blue-600 mb-2"></i>
+							<span data-translate="skill-materialui">Material UI</span>
+						</div>
+						<div
+							class="skill-tag bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300">
+							<i class="fab fa-figma text-3xl text-purple-400 mb-2"></i>
+							<span data-translate="skill-figma">Figma</span>
+						</div>
+						<div
+							class="skill-tag bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300">
+							<i class="fab fa-wordpress text-3xl text-blue-700 mb-2"></i>
+							<span data-translate="skill-wordpress">WordPress</span>
+						</div>
+						<div
+							class="skill-tag bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300">
+							<i class="fab fa-php text-3xl text-indigo-700 mb-2"></i>
+							<span data-translate="skill-php">PHP</span>
+						</div>
+						<div
+							class="skill-tag bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300">
+							<i class="fas fa-mobile-alt text-3xl text-green-500 mb-2"></i>
+							<span data-translate="skill-mobilefirst">Mobile-First</span>
+						</div>
+						<div
+							class="skill-tag bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300">
+							<i class="fas fa-universal-access text-3xl text-teal-500 mb-2"></i>
+							<span data-translate="skill-wcag">WCAG</span>
+						</div>
+						<div
+							class="skill-tag bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex flex-col items-center transition-transform duration-300">
+							<i class="fas fa-plug text-3xl text-red-500 mb-2"></i>
+							<span data-translate="skill-api">API Integrations</span>
+						</div>
+					</div>
+
+					<div class="mt-12 grid md:grid-cols-2 gap-8">
+						<div class="bg-white dark:bg-darksecondary p-6 rounded-lg shadow"
+							data-translate-group="skill-desc1">
+							<h3 class="text-xl font-heading font-bold mb-4" data-translate="skill-desc1-heading">
+								Mobile-First Responsiveness
+							</h3>
+							<p class="text-gray-600 dark:text-gray-300" data-translate="skill-desc1-text">
+								Every website I build is designed with
+								mobile users in mind first, then enhanced
+								for larger screens. This ensures optimal
+								performance and user experience across all
+								devices.
+							</p>
+						</div>
+						<div class="bg-white dark:bg-darksecondary p-6 rounded-lg shadow"
+							data-translate-group="skill-desc2">
+							<h3 class="text-xl font-heading font-bold mb-4" data-translate="skill-desc2-heading">
+								WCAG Accessibility
+							</h3>
+							<p class="text-gray-600 dark:text-gray-300" data-translate="skill-desc2-text">
+								I prioritize accessibility in all my
+								projects, implementing WCAG guidelines to
+								make websites usable for everyone, including
+								people with disabilities.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- About Section -->
+		<section id="about" class="py-20 bg-lightsecondary dark:bg-darksecondary">
+			<div class="container mx-auto px-4">
+				<div class="flex flex-col md:flex-row items-center gap-12">
+					<div class="md:w-1/3 flex justify-center">
+						<div
+							class="w-64 h-64 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden shadow">
+							<img src="/assets/img/profile.jpg" alt="" class="profile-pic h-[100%] object-cover" />
+						</div>
+					</div>
+					<div class="md:w-2/3">
+						<h2 class="text-3xl font-heading font-bold mb-6" data-translate="about-heading">
+							About Me
+						</h2>
+						<p class="text-lg mb-6" data-translate="about-p1">
+							With over 7 years of frontend development
+							experience, I specialize in creating responsive,
+							accessible websites and landing pages that
+							deliver results. My focus is on building fast,
+							intuitive, and cross-device interfaces that
+							engage users and drive conversions.
+						</
