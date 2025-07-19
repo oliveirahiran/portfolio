@@ -1,0 +1,1189 @@
+Com certeza. O ajuste é novamente na função normalizeNumber, para que ela verifique se um número é inteiro antes de formatá-lo.
+Se for um número inteiro, ele será retornado sem as casas decimais. Caso contrário, o comportamento anterior (com duas casas decimais e vírgula) será mantido.
+Abaixo está o código inteiro com apenas essa modificação realizada.
+Código Modificado
+<!DOCTYPE html>
+<html lang="pt-BR">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Calculadora de Procedimentos Odontológicos</title>
+		<style>
+			/* Reset de estilos repetidos e consolidação */
+
+			.form-section {
+				overflow: auto;
+				max-height: 80vh;
+				max-width: 800px;
+				margin: 20px auto;
+				padding: 30px;
+				background: #520e1f;
+				border-radius: 8px;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+				transition: all 0.3s ease;
+				scrollbar-width: thin;
+				scrollbar-color: #e73d26 #00000000;
+			}
+			.form-row input:focus,
+			.form-row textarea:focus {
+				border-color: #e73d26 !important;
+			}
+			@media (max-width: 500px) {
+				.form-section {
+					overflow: auto;
+					max-height: 70vh;
+					max-width: 800px;
+					margin: 20px auto;
+					padding: 30px;
+					background: #520e1f;
+					border-radius: 8px;
+					box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+					transition: all 0.3s ease;
+					bottom: 20px;
+					position: relative;
+				}
+			}
+			.section-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 25px;
+				padding-bottom: 15px;
+				border-bottom: 1px solid #dee2e6;
+			}
+
+			.section-header h3 {
+				margin: 0;
+				color: #ffffff;
+				font-size: 1.5rem;
+				font-weight: 600;
+				margin-right: 40px;
+			}
+			@media (max-width: 992px) {
+				.section-header h3 {
+					margin: 0;
+					color: #ffffff;
+					font-size: 1.5rem;
+					font-weight: 600;
+					margin-right: 0;
+				}
+			}
+			@media (max-width: 500px) {
+				.section-header h3 {
+					margin: 0 0 16px 0;
+					color: #ffffff;
+					font-size: 1.5rem;
+					text-align: center;
+					font-weight: 600;
+				}
+			}
+			.progress-indicator {
+				display: flex;
+				gap: 8px;
+			}
+
+			.progress-indicator span {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 30px;
+				height: 30px;
+				border-radius: 50%;
+				background-color: #f8f9fa;
+				color: #520e1f;
+				font-weight: 600;
+				border: 1px solid white;
+			}
+
+			.progress-indicator .active-step {
+				background-color: #e73d26;
+				color: white;
+				border-color: #e73d26;
+			}
+
+			.form-row {
+				margin-bottom: 20px;
+			}
+
+			.form-row label {
+				display: block;
+				margin-bottom: 8px;
+				font-weight: 500;
+				color: #e73d26;
+			}
+
+			.form-row input,
+			.form-row textarea {
+				width: 100%;
+				padding: 12px;
+				border: 1px solid #e73d26;
+				border-radius: 8px;
+				font-size: 1rem;
+				transition: all 0.3s ease;
+			}
+
+			.form-row input:focus,
+			.form-row textarea:focus {
+				outline: none;
+				border-color: #2c7be5;
+				box-shadow: 0 0 0 3px rgba(44, 123, 229, 0.2);
+			}
+
+			.form-row input.invalid {
+				border-color: #e74c3c;
+				background-color: rgba(231, 76, 60, 0.05);
+			}
+
+			.navigation-buttons {
+				display: flex;
+				justify-content: space-between;
+				margin-top: 30px;
+			}
+
+			button {
+				padding: 12px 24px;
+				border: none;
+				border-radius: 8px;
+				font-size: 1rem;
+				font-weight: 600;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.next-button {
+				background-color: #e73d26;
+				color: white;
+			}
+
+			.next-button:hover {
+				background-color: #520e1f;
+			}
+
+			.prev-button {
+				background-color: #e73d26;
+				color: white;
+			}
+
+			.prev-button:hover {
+				background-color: #520e1f;
+			}
+
+			.submit-button {
+				background-color: #e73d26;
+				color: white;
+			}
+
+			.submit-button:hover {
+				background-color: #520e1f;
+			}
+
+			/* Spinner de carregamento */
+			.spinner {
+				display: inline-block;
+				width: 70px;
+				height: 70px;
+				border: 5px solid rgba(44, 123, 229, 0.1);
+				border-radius: 50%;
+				border-top-color: #2c7be5;
+				animation: spin 1s ease-in-out infinite;
+			}
+
+			@keyframes spin {
+				to {
+					transform: rotate(360deg);
+				}
+			}
+
+			#carregamento {
+				background-color: white;
+				border-radius: 8px;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+				padding: 40px 20px;
+				margin: 30px auto;
+				max-width: 600px;
+				text-align: center;
+			}
+
+			.loading-text {
+				margin-top: 20px;
+				font-size: 18px;
+				color: #343a40;
+				font-weight: 500;
+			}
+
+			.loading-subtext {
+				font-size: 14px;
+				color: #6c757d;
+			}
+
+			/* Mensagem de Sucesso */
+			#mensagem-sucesso {
+				background-color: #f0fff4;
+				border: 1px solid #c6f6d5;
+				border-radius: 8px;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+				padding: 40px;
+				margin: 30px auto;
+				text-align: center;
+				max-width: 600px;
+			}
+
+			.success-icon {
+				background-color: #00b894;
+				color: white;
+				width: 80px;
+				height: 80px;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 40px;
+				margin: 0 auto 20px;
+			}
+			
+				/* Mensagem de Sucesso */
+			#mensagem-sucesso {
+				background-color: #f0fff4;
+				border: 1px solid #c6f6d5;
+				border-radius: 8px;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+				padding: 40px;
+				margin: 30px auto;
+				text-align: center;
+				max-width: 600px;
+			}
+
+			.success-icon {
+				background-color: #00b894;
+				color: white;
+				width: 80px;
+				height: 80px;
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 40px;
+				margin: 0 auto 20px;
+			}
+
+			/* Mensagens de erro */
+			.error-message {
+				color: #e74c3c;
+				font-size: 0.85rem;
+				margin-top: 5px;
+				display: none;
+			}
+
+			/* Grupo de porcentagem */
+			.percent-input-group {
+				position: relative;
+				display: inline-block;
+				width: 100%;
+			}
+
+			.percent-input-group input {
+				width: 100%;
+				padding-right: 2rem;
+				box-sizing: border-box;
+			}
+
+			.percent-input-group .percent-sign {
+				position: absolute;
+				right: 0.5rem;
+				top: 50%;
+				transform: translateY(-50%);
+				pointer-events: none;
+				color: #6c757d;
+			}
+
+			/* Responsividade */
+			@media (max-width: 768px) {
+				.form-section {
+					padding: 20px;
+				}
+
+				.section-header {
+					flex-direction: column;
+					gap: 15px;
+					align-items: flex-start;
+				}
+
+				.progress-indicator {
+					width: 100%;
+					justify-content: space-between;
+				}
+
+				.navigation-buttons {
+					flex-direction: column;
+					gap: 10px;
+				}
+
+				button {
+					width: 100%;
+				}
+
+				.prev-button {
+					order: 2;
+				}
+
+				.next-button,
+				.submit-button {
+					order: 1;
+				}
+			}
+
+			@keyframes pulse-error {
+				0% {
+					box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.475);
+					border-color: #ffffff;
+				}
+				50% {
+					box-shadow: 0 0 1px 6px rgba(255, 255, 255, 0.2);
+					border-color: #ffffff;
+				}
+				100% {
+					box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+					border-color: #ffffff;
+				}
+			}
+			.form-row input.invalid {
+				border-color: #ff0000;
+				background-color: rgb(255 255 255);
+				border-width: 1px;
+				border: 1px solid red;
+				animation: pulse-error 1s ease-out 3;
+			}
+		</style>
+	</head>
+	<body>
+		<form class="elementor-form" id="calculadora-tratamento-form">
+			<input
+				type="hidden"
+				name="ramdoc_api_id"
+				value="7e421e0c-6c1f-4007-b2d0-db7b33bc6e50"
+			/>
+			<input
+				type="hidden"
+				name="ramdoc_documento_id"
+				value="e0cde7ebc-bb48-4057-b864-19803c493ad2"
+			/>
+			<input
+				type="hidden"
+				name="ramdoc_section_1"
+				value="INFORMAÇÕES GERAIS DO USUÁRIO"
+			/>
+
+			<div class="form-section" id="section-1" style="display: block">
+				<div class="section-header">
+					<h3>INFORMAÇÕES GERAIS DO USUÁRIO</h3>
+					<div class="progress-indicator">
+						<span class="active-step">1</span>
+						<span>2</span>
+						<span>3</span>
+					</div>
+				</div>
+				<div class="form-row">
+					<label for="nome_interessado">Seu nome completo:</label>
+					<input
+						type="text"
+						id="nome_interessado"
+						name="nome_interessado"
+						placeholder="Ex: João Santos"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="email_interessado">Seu melhor e-mail:</label>
+					<input
+						type="email"
+						id="email_interessado"
+						name="email_interessado"
+						placeholder="Ex: seuemail@exemplo.com"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="nome_clinica">Nome da Clínica:</label>
+					<input
+						type="text"
+						id="nome_clinica"
+						name="nome_clinica"
+						placeholder="Ex: Clínica Odontológica Santos"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="nome_profissional"
+						>Nome Completo do Profissional:</label
+					>
+					<input
+						type="text"
+						id="nome_profissional"
+						name="nome_profissional"
+						placeholder="Ex: Dra. Maria Santos"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="endereco_clinica">Endereço da Clínica:</label>
+					<input
+						type="text"
+						id="endereco_clinica"
+						name="endereco_clinica"
+						placeholder="Ex: Av. Sete de Setembro, 9999 - Centro"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="cep_municipio_uf">CEP - Município- UF:</label>
+					<input
+						type="text"
+						id="cep_municipio_uf"
+						name="cep_municipio_uf"
+						placeholder="Ex: 80.000-000 - Curitiba-PR"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="website_clinica">Website da clínica:</label>
+					<input
+						type="text"
+						id="website_clinica"
+						name="website_clinica"
+						placeholder="Ex: www.clinicasantos41.com.br"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="remuneracao_dentista"
+						>Remuneração do dentista por hora (R$):</label
+					>
+					<input
+						type="text"
+						id="remuneracao_dentista"
+						name="remuneracao_dentista"
+						placeholder="Ex: 150,00"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="anuidade_cro">Anuidade CRO:</label>
+					<input
+						type="text"
+						id="anuidade_cro"
+						name="anuidade_cro"
+						placeholder="Ex: 550,00"
+						required
+					/>
+				</div>
+				<div class="navigation-buttons">
+					<button
+						type="button"
+						class="next-button"
+						onclick="validateAndNext(Number(1))"
+					>
+						Próximo
+					</button>
+				</div>
+			</div>
+
+			<input
+				type="hidden"
+				name="ramdoc_section_2"
+				value="INFORMAÇÕES GERAIS DA CLÍNICA"
+			/>
+
+			<div class="form-section" id="section-2" style="display: none">
+				<div class="section-header">
+					<h3>INFORMAÇÕES GERAIS DA CLÍNICA</h3>
+					<div class="progress-indicator">
+						<span>1</span>
+						<span class="active-step">2</span>
+						<span>3</span>
+					</div>
+				</div>
+				<div class="form-row">
+					<label for="tx_administracao_cartao"
+						>Tx de Administração do Cartão de crédito:</label
+					>
+					<div class="percent-input-group">
+						<input
+							type="text"
+							id="tx_administracao_cartao"
+							name="tx_administracao_cartao"
+							value=""
+							placeholder="Ex: 4,99"
+							required
+						/>
+						<span class="percent-sign">%</span>
+					</div>
+				</div>
+				<div class="form-row">
+					<label for="taxa_antecipacao_adm"
+						>Taxa de antecipação da Adm. do Cartão (a.m.):</label
+					>
+					<div class="percent-input-group">
+						<input
+							type="text"
+							id="taxa_antecipacao_adm"
+							name="taxa_antecipacao_adm"
+							value=""
+							placeholder="Ex: 3,99"
+							required
+						/>
+						<span class="percent-sign">%</span>
+					</div>
+				</div>
+				<div class="form-row">
+					<label for="receita_mensal_extra"
+						>Receita Mensal Extra:</label
+					>
+					<input
+						type="text"
+						id="receita_mensal_extra"
+						name="receita_mensal_extra"
+						value=""
+						placeholder="Ex: 2500,00"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="horas_funcionamento"
+						>Horas funcionamento da clínica por dia:</label
+					>
+					<input
+						type="text"
+						id="horas_funcionamento"
+						name="horas_funcionamento"
+						value=""
+						placeholder="Ex: 10"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="dias_funcionamento"
+						>Dias funcionamento por semana:</label
+					>
+					<input
+						type="text"
+						id="dias_funcionamento"
+						name="dias_funcionamento"
+						value=""
+						placeholder="Ex: 5"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="ociosidade_clinica"
+						>Ociosidade da clínica:</label
+					>
+					<div class="percent-input-group">
+						<input
+							type="text"
+							id="ociosidade_clinica"
+							name="ociosidade_clinica"
+							value=""
+							placeholder="Ex: 10"
+							required
+						/>
+						<span class="percent-sign">%</span>
+					</div>
+				</div>
+				<div class="form-row">
+					<label for="qtd_colaboradores"
+						>Quantidade de colaboradores da clínica:</label
+					>
+					<input
+						type="text"
+						id="qtd_colaboradores"
+						name="qtd_colaboradores"
+						value=""
+						placeholder="Ex: 2"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="salario_medio"
+						>Salário médio por colaborador (mensal):</label
+					>
+					<input
+						type="text"
+						id="salario_medio"
+						name="salario_medio"
+						value=""
+						placeholder="Ex: 3000,00"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="percentual_encargos"
+						>Percentual de encargos:</label
+					>
+					<div class="percent-input-group">
+						<input
+							type="text"
+							id="percentual_encargos"
+							name="percentual_encargos"
+							value=""
+							placeholder="Ex: 80"
+							required
+						/>
+						<span class="percent-sign">%</span>
+					</div>
+				</div>
+				<div class="form-row">
+					<label for="valor_aluguel"
+						>Valor do aluguel (mensal):</label
+					>
+					<input
+						type="text"
+						id="valor_aluguel"
+						name="valor_aluguel"
+						value=""
+						placeholder="Ex: 4000,00"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="valor_condominio"
+						>Valor do condomínio (mensal):</label
+					>
+					<input
+						type="text"
+						id="valor_condominio"
+						name="valor_condominio"
+						value=""
+						placeholder="Ex: 800,00"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="despesas_publicidade"
+						>Despesas de publicidade (mensal):</label
+					>
+					<input
+						type="text"
+						id="despesas_publicidade"
+						name="despesas_publicidade"
+						value=""
+						placeholder="Ex: 1000,00"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="despesas_manutencao"
+						>Despesas de manutenção (mensal):</label
+					>
+					<input
+						type="text"
+						id="despesas_manutencao"
+						name="despesas_manutencao"
+						value=""
+						placeholder="Ex: 1000,00"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="agua_mes">Água/mês (mensal):</label>
+					<input
+						type="text"
+						id="agua_mes"
+						name="agua_mes"
+						value=""
+						placeholder="Ex: 130,00"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="energia_eletrica"
+						>Energia Elétrica/mês (mensal):</label
+					>
+					<input
+						type="text"
+						id="energia_eletrica"
+						name="energia_eletrica"
+						value=""
+						placeholder="Ex: 260,00"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="internet">Internet (mensal):</label>
+					<input
+						type="text"
+						id="internet"
+						name="internet"
+						value=""
+						placeholder="Ex: 149,90"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="taxa_coleta"
+						>Taxa de coleta de resíduos hospitalares
+						(mensal):</label
+					>
+					<input
+						type="text"
+						id="taxa_coleta"
+						name="taxa_coleta"
+						value=""
+						placeholder="Ex: 60,00"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="softwares">Softwares (mensal):</label>
+					<input
+						type="text"
+						id="softwares"
+						name="softwares"
+						value=""
+						placeholder="Ex: 109,90"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="materiais_escritorio"
+						>Materiais de Escritório (mensal):</label
+					>
+					<input
+						type="text"
+						id="materiais_escritorio"
+						name="materiais_escritorio"
+						value=""
+						placeholder="Ex: 100,00"
+						required
+					/>
+				</div>
+				<div class="navigation-buttons">
+					<button
+						type="button"
+						class="prev-button"
+						onclick="prevSection(Number(2))"
+					>
+						Anterior
+					</button>
+					<button
+						type="button"
+						class="next-button"
+						onclick="validateAndNext(Number(2))"
+					>
+						Próximo
+					</button>
+				</div>
+			</div>
+
+			<input
+				type="hidden"
+				name="ramdoc_section_3"
+				value="INFORMAÇÕES ESPECÍFICAS"
+			/>
+
+			<div class="form-section" id="section-3" style="display: none">
+				<div class="section-header">
+					<h3>INFORMAÇÕES ESPECÍFICAS</h3>
+					<div class="progress-indicator">
+						<span>1</span>
+						<span>2</span>
+						<span class="active-step">3</span>
+					</div>
+				</div>
+
+				<div class="form-row">
+					<label for="titulo_tratamento">Título do tratamento:</label>
+					<input
+						type="text"
+						id="titulo_tratamento"
+						name="titulo_tratamento"
+						value=""
+						placeholder="Ex: Tratamento de Canal"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="quantidade_horas"
+						>Quantidade de horas do tratamento:</label
+					>
+					<input
+						type="text"
+						id="quantidade_horas"
+						name="quantidade_horas"
+						value=""
+						placeholder="Ex: 6"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="custo_material"
+						>Custo com material no tratamento:</label
+					>
+					<input
+						type="text"
+						id="custo_material"
+						name="custo_material"
+						value=""
+						placeholder="Ex: 159,76"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="margem_lucro"
+						>Margem de lucro desejada - %:</label
+					>
+					<div class="percent-input-group">
+						<input
+							type="text"
+							id="margem_lucro"
+							name="margem_lucro"
+							value=""
+							placeholder="Ex: 50"
+							required
+						/>
+						<span class="percent-sign">%</span>
+					</div>
+				</div>
+				<div class="form-row">
+					<label for="custo_fixo_adicional"
+						>Custo fixo adicional do tratamento:</label
+					>
+					<input
+						type="text"
+						id="custo_fixo_adicional"
+						name="custo_fixo_adicional"
+						value=""
+						placeholder="Ex: 50,00"
+						required
+					/>
+				</div>
+				<div class="form-row">
+					<label for="quantidade_parcelas"
+						>Quantidade de parcelas (2 a 12):</label
+					>
+					<input
+						type="text"
+						id="quantidade_parcelas"
+						name="quantidade_parcelas"
+						value=""
+						placeholder="Ex: 8"
+						required
+					/>
+				</div>
+				<div class="navigation-buttons">
+					<button
+						type="button"
+						class="prev-button"
+						onclick="prevSection(Number(3))"
+					>
+						Anterior
+					</button>
+					<button
+						type="button"
+						id="ramdoc-submit"
+						class="submit-button"
+						onclick="submitForm()"
+					>
+						Solicitar
+					</button>
+				</div>
+			</div>
+		</form>
+
+		<div id="carregamento" style="display: none">
+			<div class="spinner"></div>
+			<p class="loading-text">Processando sua solicitação...</p>
+			<p class="loading-subtext">Não feche esta página.</p>
+		</div>
+
+		<div id="mensagem-sucesso" style="display: none">
+			<div class="success-icon">✓</div>
+			<h3>Solicitação recebida!</h3>
+			<p>Documento sendo enviado para seu e-mail.</p>
+		</div>
+
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script>
+			jQuery(document).ready(function ($) {
+				$(".e-font-icon-svg.e-eicon-close.eicon-close").each(
+					function () {
+						const currentStyle = $(this).attr("style") || "";
+						$(this).attr(
+							"style",
+							currentStyle + "; fill: #ffffff !important"
+						);
+					}
+				);
+				const API_URL = "https://ramdoc.com.br/api/gerar-documento/";
+				const API_ID = "7e421e0c-6c1f-4007-b2d0-db7b33bc6e50";
+				const DOCUMENTO_ID = "0cde7ebc-bb48-4057-b864-19803c493ad2";
+
+				// Funções auxiliares
+				function normalizeNumber(val) {
+					const num = parseFloat(
+						String(val)
+							.replace(/\./g, "")
+							.replace(",", ".")
+							.replace(/[^\d.]/g, "")
+					);
+					
+					if (isNaN(num)) {
+						return "0"; // Retorna '0' para valores inválidos
+					}
+
+					// MODIFICADO: Verifica se o número é inteiro.
+					// Se for, retorna sem casas decimais.
+					// Se não, retorna com vírgula e duas casas decimais.
+					if (Number.isInteger(num)) {
+						return num.toString();
+					} else {
+						return num.toFixed(2).replace('.', ',');
+					}
+				}
+
+				function formatPercentage(val) {
+					return `${normalizeNumber(val)}%`;
+				}
+
+				function showError(message) {
+					const $error = $("#form-error");
+					if (!$error.length) {
+						$(".calculadora-tratamento-form").prepend(
+							'<div id="form-error" style="display:none; background:#ffe6e6; color:#e74c3c; padding:15px; margin:20px auto; max-width:800px; text-align:center; border-radius:8px; border:1px solid #e74c3c;"></div>'
+						);
+					}
+					$("#form-error")
+						.html(message)
+						.stop(true, true)
+						.fadeIn(300)
+						.delay(5000)
+						.fadeOut(300);
+					$("html, body").animate({ scrollTop: 0 }, 300);
+				}
+
+				function clearErrors() {
+					$(".invalid").removeClass("invalid");
+					$("#form-error").hide();
+				}
+
+				window.validateAndNext = function (currentSection) {
+					clearErrors();
+					const $section = $(`#section-${currentSection}`);
+					let isValid = true;
+
+					$section.find("input[required]").each(function () {
+						const $input = $(this);
+						if (!$input.val().trim()) {
+							$input.addClass("invalid");
+							isValid = false;
+						}
+					});
+
+					if (!isValid) {
+						showError(
+							"Por favor, preencha todos os campos obrigatórios."
+						);
+						return;
+					}
+
+					// Validações específicas
+					if (currentSection === 1) {
+						const email = $("#email_interessado").val().trim();
+						if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+							$("#email_interessado").addClass("invalid");
+							showError("Formato de e-mail inválido.");
+							return;
+						}
+					}
+					if (currentSection === 2) {
+						const ociosidade = parseFloat(
+							normalizeNumber($("#ociosidade_clinica").val()).replace(',', '.')
+						);
+						if (ociosidade < 0 || ociosidade > 100) {
+							$("#ociosidade_clinica").addClass("invalid");
+							showError("Ociosidade deve estar entre 0% e 100%.");
+							return;
+						}
+					}
+
+					$section.hide();
+					$(`#section-${currentSection + 1}`).show();
+
+					$(".progress-indicator span").removeClass("active-step");
+					$(`#section-${currentSection + 1} .progress-indicator span`)
+						.eq(currentSection)
+						.addClass("active-step");
+
+					$("html, body").animate({ scrollTop: 0 }, 300);
+				};
+
+				window.prevSection = function (currentSection) {
+					clearErrors();
+					$(`#section-${currentSection}`).hide();
+					$(`#section-${currentSection - 1}`).show();
+
+					$(".progress-indicator span").removeClass("active-step");
+					$(`#section-${currentSection - 1} .progress-indicator span`)
+						.eq(currentSection - 2)
+						.addClass("active-step");
+
+					$("html, body").animate({ scrollTop: 0 }, 300);
+				};
+
+				// Envio do formulário
+				window.submitForm = function () {
+					clearErrors();
+					let isValid = true;
+
+					// Validar última seção
+					$("#section-3 input[required]").each(function () {
+						const $input = $(this);
+						if (!$input.val().trim()) {
+							$input.addClass("invalid");
+							isValid = false;
+						}
+					});
+
+					const parcelas = parseFloat(
+						normalizeNumber($("#quantidade_parcelas").val()).replace(',', '.')
+					);
+					if (parcelas < 2 || parcelas > 12) {
+						$("#quantidade_parcelas").addClass("invalid");
+						isValid = false;
+						showError(
+							"Quantidade de parcelas deve ser entre 2 e 12."
+						);
+					}
+
+					if (!isValid) return;
+
+					// Construir payload
+					const payload = {
+						api_id: API_ID,
+						documento_id: DOCUMENTO_ID,
+						nome_interessado: $("#nome_interessado").val().trim(),
+						email_interessado: $("#email_interessado").val().trim(),
+						assunto_email: `Cálculo de custos - ${$(
+							"#titulo_tratamento"
+						)
+							.val()
+							.trim()}`,
+						conteudo: `**INFORMAÇÕES GERAIS DO USUÁRIO**
+[Nome da Clínica]:${$("#nome_clinica").val().trim()}
+[Nome Completo do Profissional]:${$("#nome_profissional").val().trim()}
+[Endereço da Clínica]:${$("#endereco_clinica").val().trim()}
+[CEP - Município- UF]:${$("#cep_municipio_uf").val().trim()}
+[Website da clínica]:${$("#website_clinica").val().trim()}
+[Remuneração do dentista por hora (R$)]:${normalizeNumber(
+							$("#remuneracao_dentista").val()
+						)}
+[Anuidade CRO]:${normalizeNumber($("#anuidade_cro").val())}
+**INFORMAÇÕES GERAIS DA CLÍNICA**
+[Taxa de Administração do Cartão de crédito]:${formatPercentage(
+							$("#tx_administracao_cartao").val()
+						)}
+[Taxa de antecipação da Adm. do Cartão (a.m.)]:${formatPercentage(
+							$("#taxa_antecipacao_adm").val()
+						)}
+[Receita Mensal Extra]:${normalizeNumber($("#receita_mensal_extra").val())}
+[Horas funcionamento da clínica por dia]:${normalizeNumber(
+							$("#horas_funcionamento").val()
+						)}
+[Dias funcionamento por semana]:${normalizeNumber(
+							$("#dias_funcionamento").val()
+						)}
+[Ociosidade da clínica]:${formatPercentage($("#ociosidade_clinica").val())}
+[Quantidade de colaboradores da clínica]:${normalizeNumber(
+							$("#qtd_colaboradores").val()
+						)}
+[Salário médio por colaborador (mensal)]:${normalizeNumber(
+							$("#salario_medio").val()
+						)}
+[Percentual de encargos]:${formatPercentage($("#percentual_encargos").val())}
+[Valor do aluguel (mensal)]:${normalizeNumber($("#valor_aluguel").val())}
+[Valor do condomínio (mensal)]:${normalizeNumber($("#valor_condominio").val())}
+[Despesas de publicidade (mensal)]:${normalizeNumber(
+							$("#despesas_publicidade").val()
+						)}
+[Despesas de manutenção (mensal)]:${normalizeNumber(
+							$("#despesas_manutencao").val()
+						)}
+[Água/mês (mensal)]:${normalizeNumber($("#agua_mes").val())}
+[Energia Elétrica/mês (mensal)]:${normalizeNumber($("#energia_eletrica").val())}
+[Internet (mensal)]:${normalizeNumber($("#internet").val())}
+[Taxa de coleta de resíduos hospitalares (mensal)]:${normalizeNumber(
+							$("#taxa_coleta").val()
+						)}
+[Softwares (mensal)]:${normalizeNumber($("#softwares").val())}
+[Materiais de Escritório (mensal)]:${normalizeNumber(
+							$("#materiais_escritorio").val()
+						)}
+**INFORMAÇÕES ESPECÍFICAS**
+[Título do tratamento]:${$("#titulo_tratamento").val().trim()}
+[Quantidade de horas do tratamento]:${normalizeNumber(
+							$("#quantidade_horas").val()
+						)}
+[Custo com material no tratamento]:${normalizeNumber(
+							$("#custo_material").val()
+						)}
+[Margem de lucro desejada - %]:${formatPercentage($("#margem_lucro").val())}
+[Custo fixo adicional do tratamento]:${normalizeNumber(
+							$("#custo_fixo_adicional").val()
+						)}
+[Quantidade de parcelas (2 a 12)]:${normalizeNumber(
+							$("#quantidade_parcelas").val()
+						)}`,
+					};
+
+					console.log("payload", payload);
+
+					$("#calculadora-tratamento-form").hide();
+					$("#carregamento").show();
+
+					$.ajax({
+						url: "/wp-admin/admin-ajax.php",
+						type: "POST",
+						data: {
+							action: "ramdoc_proxy",
+							payload: JSON.stringify(payload),
+						},
+						success: function (response) {
+							console.log("Resposta da API RAMDOC:", response);
+
+							setTimeout(function () {
+								$("#carregamento").hide();
+								$("#mensagem-sucesso").show();
+								localStorage.setItem("form_submitted", "true");
+								$("html, body").animate(
+									{
+										scrollTop:
+											$("#mensagem-sucesso").offset()
+												.top - 50,
+									},
+									500
+								);
+							}, 3000);
+						},
+						error: function (xhr, status, error) {
+							console.error("Erro na requisição AJAX:", error);
+
+							setTimeout(function () {
+								$("#carregamento").hide();
+								$("#mensagem-sucesso").show();
+								localStorage.setItem("form_submitted", "true");
+								$("html, body").animate(
+									{
+										scrollTop:
+											$("#mensagem-sucesso").offset()
+												.top - 50,
+									},
+									500
+								);
+							}, 3000);
+						},
+					});
+				};
+			});
+		</script>
+	</body>
+</html>
+
